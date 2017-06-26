@@ -40,7 +40,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             connectedCallback() {
                 super.connectedCallback();
 
+                // This is for updating the carousel if child elements are added or removed
                 this.shadowRoot.addEventListener('slotchange', this._resetSelected.bind(this));
+
                 this._resetSelected();
             }
 
