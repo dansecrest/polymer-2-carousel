@@ -12,36 +12,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="bower_components/polymer/polymer-element.html">
 
 <dom-module id="my-carousel">
-  <template>
+    <template>
+        <!-- Styles MUST be inside template -->
+        <style>
+             :host {
+                display: block;
+            }
+        </style>
 
-    <!-- Styles MUST be inside template -->
-    <style>
+        <p>TODO: Implement image carousel</p>
+    </template>
 
-      :host {
-        display: block;
-      }
+    <script>
+        // Extend Polymer.Element base class
+        class MyCarousel extends Polymer.Element {
 
-    </style>
+            static get is() { return 'my-carousel' }
 
-    <p>TODO: Implement image carousel</p>
+            connectedCallback() {
+                super.connectedCallback();
+            }
 
-  </template>
+        }
 
-  <script>
-
-    // Extend Polymer.Element base class
-    class MyCarousel extends Polymer.Element {
-
-      static get is() { return 'my-carousel' }
-
-      connectedCallback() {
-        super.connectedCallback();
-      }
-
-    }
-
-    // Register custom element definition using standard platform API
-    customElements.define(MyCarousel.is, MyCarousel);
-
-  </script>
+        // Register custom element definition using standard platform API
+        customElements.define(MyCarousel.is, MyCarousel);
+    </script>
 </dom-module>
