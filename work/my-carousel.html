@@ -61,10 +61,36 @@
         class MyCarousel extends MyMixin(Polymer.Element) {
             static get is() { return 'my-carousel' }
 
+            ready() {
+                super.ready();
+                requestAnimationFrame(this._installListeners.bind(this));
+            }
+
+            _installListeners() {
+                this.addEventListener('transitionend', this._resetChildrenStyles.bind(this));
+            }
+
+            _resetChildrenStyles() {
+                let element = this.firstElementChild;
+
+                while (element) {
+                    element.style.display = '';
+                    element.style.transition = '';
+                    element.style.transform = '';
+                    element = elem.nextElementSibling;
+                }
+            }
+
             _loadImage(img) {
                 if (img && !img.src) {
                     img.src = img.getAttribute('data-src');
                 }
+            }
+
+            _translateX(element, x, transition) {
+                element.style.display = 'block';
+                element.style.transition = transition ? 'transform 0.2s' : '';
+                element.style.transform = 'translate3d(' + x + 'px, 0, 0)';
             }
 
             _selectedChanged(selected, oldSelected) {
@@ -88,7 +114,15 @@
                 const element = this.selected && this.selected.previousElementSibling;
 
                 if (element) {
+                    // Setup transition start state
+                    const oldSelected = this.selected;
+                    this._translateX(oldSelected, 0);
+                    this._translateX(element, -this.offsetWidth);
+
+                    // Start the transition
                     this.selected = element;
+                    this._translateX(oldSelected, this.offsetWidth, true /* transition */);
+                    this._translateX(element, 0, true /* transition */);
                 }
             }
 
@@ -96,7 +130,15 @@
                 const element = this.selected && this.selected.nextElementSibling;
 
                 if (element) {
+                    // Setup transition start state
+                    const oldSelected = this.selected;
+                    this._translateX(oldSelected, 0);
+                    this._translateX(element, this.offsetWidth);
+
+                    // Start the transition
                     this.selected = element;
+                    this._translateX(oldSelected, -this.offsetWidth, true /* transition */);
+                    this._translateX(element, 0, true /* transition */);
                 }
             }
         }
