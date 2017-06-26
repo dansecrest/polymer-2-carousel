@@ -61,6 +61,12 @@
         class MyCarousel extends MyMixin(Polymer.Element) {
             static get is() { return 'my-carousel' }
 
+            _loadImage(img) {
+                if (img && !img.src) {
+                    img.src = img.getAttribute('data-src');
+                }
+            }
+
             _selectedChanged(selected, oldSelected) {
                 // Invokes _selectedChanged() in MyMixin
                 super._selectedChanged(selected, oldSelected);
@@ -68,6 +74,10 @@
                 if (selected) {
                     this.$.prevBtn.disabled = !selected.previousElementSibling;
                     this.$.nextBtn.disabled = !selected.nextElementSibling;
+
+                    this._loadImage(selected);
+                    this._loadImage(selected.previousElementSibling);
+                    this._loadImage(selected.nextElementSibling);
                 } else {
                     this.$.nextBtn.disabled = true;
                     this.$.prevBtn.disabled = true;
