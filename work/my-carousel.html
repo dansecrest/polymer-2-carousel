@@ -17,10 +17,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <style>
              :host {
                 display: block;
+                position: relative;
+                overflow: hidden;
+            }
+
+            div > ::slotted(:not([selected])) {
+                display: none;
             }
         </style>
 
-        <p>TODO: Implement image carousel</p>
+        <div>
+            <slot></slot>
+        </div>
     </template>
 
     <script>
@@ -31,8 +39,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             connectedCallback() {
                 super.connectedCallback();
+
+                this.shadowRoot.addEventListener('slotchange', this._resetSelected.bind(this));
+                this._resetSelected();
             }
 
+            _resetSelected() {
+                if (this.firstElementChild) {
+                    this.firstElementChild.setAttribute('selected', '');
+                }
+            }
         }
 
         // Register custom element definition using standard platform API
