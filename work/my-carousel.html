@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 overflow: hidden;
             }
 
-            div > ::slotted(:not([selected])) {
+            div> ::slotted(:not([selected])) {
                 display: none;
             }
         </style>
@@ -34,8 +34,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
         // Extend Polymer.Element base class
         class MyCarousel extends Polymer.Element {
-
             static get is() { return 'my-carousel' }
+
+            static get properties() {
+                return {
+                    selected: {
+                        type: Object,
+                        observer: '_selectedChanged'
+                    }
+                }
+            }
 
             connectedCallback() {
                 super.connectedCallback();
@@ -47,9 +55,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             _resetSelected() {
-                if (this.firstElementChild) {
-                    this.firstElementChild.setAttribute('selected', '');
+                if (!this.selected || this.selected.parentElement !== this) {
+                    this.selected = this.firstElementChild;
                 }
+            }
+
+            _selectedChanged(selected, oldSelected) {
+                if (oldSelected) oldSelected.removeAttribute('selected');
+                if (selected) selected.setAttribute('selected', '');
             }
         }
 
